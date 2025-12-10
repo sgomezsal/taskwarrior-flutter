@@ -64,36 +64,56 @@ class ProjectColumnTaskc extends StatelessWidget {
             ],
           ),
         ),
-        ProjectTileTaskc(
-            project: SentenceManager(
+        ExpansionTile(
+          key: const PageStorageKey('projects-expansion-taskc'),
+          title: Text(
+            SentenceManager(
               currentLanguage: AppSettings.selectedLanguage,
-            ).sentences.allProjects,
-            projectFilter: projectFilter,
-            callback: callback),
-        if (projects.isNotEmpty)
-          ...projects.map((entry) => ProjectTileTaskc(
-                project: entry,
-                projectFilter: projectFilter,
-                callback: callback,
-              ))
-        else
-          Column(
-            children: [
-              Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .noProjectsFound,
-                style: TextStyle(
-                  fontFamily: FontFamily.poppins,
-                  fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: tColors.primaryTextColor,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+            ).sentences.project,
+            style: TextStyle(
+              fontFamily: FontFamily.poppins,
+              fontWeight: TaskWarriorFonts.bold,
+              fontSize: TaskWarriorFonts.fontSizeSmall,
+              color: tColors.primaryTextColor,
+            ),
           ),
+          iconColor: tColors.primaryTextColor,
+          collapsedIconColor: tColors.primaryTextColor,
+          textColor: tColors.primaryTextColor,
+          collapsedTextColor: tColors.primaryTextColor,
+          children: [
+            ProjectTileTaskc(
+                project: SentenceManager(
+                  currentLanguage: AppSettings.selectedLanguage,
+                ).sentences.allProjects,
+                projectFilter: projectFilter,
+                callback: callback),
+            if (projects.isNotEmpty)
+              ...projects.map((entry) => ProjectTileTaskc(
+                    project: entry,
+                    projectFilter: projectFilter,
+                    callback: callback,
+                  ))
+            else
+              Column(
+                children: [
+                  Text(
+                    SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .noProjectsFound,
+                    style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
+                      color: tColors.primaryTextColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+          ],
+        ),
       ],
     );
   }

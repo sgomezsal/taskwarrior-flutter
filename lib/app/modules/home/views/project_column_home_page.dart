@@ -63,49 +63,67 @@ class ProjectsColumn extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(SentenceManager(
-                      currentLanguage: AppSettings.selectedLanguage).sentences.allProjects,
-                  style: TextStyle(
-                    fontFamily: FontFamily.poppins,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: tColors.primaryTextColor,
-                  )),
-            ],
+        ExpansionTile(
+          key: const PageStorageKey('projects-expansion'),
+          title: Text(
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.project,
+            style: TextStyle(
+              fontFamily: FontFamily.poppins,
+              fontWeight: TaskWarriorFonts.bold,
+              fontSize: TaskWarriorFonts.fontSizeSmall,
+              color: tColors.primaryTextColor,
+            ),
           ),
+          iconColor: tColors.primaryTextColor,
+          collapsedIconColor: tColors.primaryTextColor,
+          textColor: tColors.primaryTextColor,
+          collapsedTextColor: tColors.primaryTextColor,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage).sentences.allProjects,
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
+                        color: tColors.primaryTextColor,
+                      )),
+                ],
+              ),
+            ),
+            if (projects.isNotEmpty)
+              ...projects.entries
+                  .where((entry) => entry.value.parent == null)
+                  .map((entry) => ProjectTile(
+                        project: entry.key,
+                        projects: projects,
+                        projectFilter: projectFilter,
+                        callback: callback,
+                      ))
+            else
+              Column(
+                children: [
+                  Text(
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .noProjectsFound,
+                    style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
+                      color: tColors.primaryTextColor,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.02,
+                  ),
+                ],
+              ),
+          ],
         ),
-        if (projects.isNotEmpty)
-          ...projects.entries
-              .where((entry) => entry.value.parent == null)
-              .map((entry) => ProjectTile(
-                    project: entry.key,
-                    projects: projects,
-                    projectFilter: projectFilter,
-                    callback: callback,
-                  ))
-        else
-          Column(
-            children: [
-              Text(
-                SentenceManager(
-                        currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .noProjectsFound,
-                style: TextStyle(
-                  fontFamily: FontFamily.poppins,
-                  fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: tColors.primaryTextColor,
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.02,
-              ),
-            ],
-          ),
       ],
     );
   }
