@@ -49,3 +49,6 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 .vscode/settings.json
+.local_android_sdk/
+android/.local_android_sdk/
+android/app/src/main/jniLibs/**/libcrc_fast*.so

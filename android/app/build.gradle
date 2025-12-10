@@ -13,19 +13,15 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+if (flutterVersionCode == null) flutterVersionCode = '1'
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+if (flutterVersionName == null) flutterVersionName = '1.0'
 
 def keystoreProperties = new Properties()
-   def keystorePropertiesFile = rootProject.file('key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 def nightlyKeystoreProperties = new Properties()
@@ -35,8 +31,20 @@ if (nightlyKeystorePropertiesFile.exists()) {
 }
 
 android {
-	namespace "com.ccextractor.taskwarriorflutter"
+    namespace "com.ccextractor.taskwarriorflutter"
+
+    // Compilar con 34
     compileSdkVersion 36
+
+    defaultConfig {
+        applicationId "com.ccextractor.taskwarriorflutter"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 36
+        ndkVersion "26.1.10909125"
+
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -67,13 +75,6 @@ android {
         }
     }
 
-    defaultConfig {
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
-
     flavorDimensions "default"
     productFlavors {
         production {
@@ -94,6 +95,9 @@ android {
             minifyEnabled false
             shrinkResources false
         }
+        debug {
+            debuggable true
+        }
     }
 }
 
@@ -104,4 +108,3 @@ flutter {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
-
