@@ -52,3 +52,4 @@ app.*.map.json
 .local_android_sdk/
 android/.local_android_sdk/
 android/app/src/main/jniLibs/**/libcrc_fast*.so
+android/app/src/main/jniLibs/
