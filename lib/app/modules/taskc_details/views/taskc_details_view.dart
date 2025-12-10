@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import '../controllers/taskc_details_controller.dart';
+import 'package:taskwarrior/app/modules/detailRoute/views/category_widget.dart';
 
 class TaskcDetailsView extends GetView<TaskcDetailsController> {
   const TaskcDetailsView({super.key});
@@ -46,6 +47,15 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.project.value,
                   (value) => controller.updateField(controller.project, value),
                 ),
+                // --- Manual Insertion ---
+                const SizedBox(height: 12),
+                CategoryWidget(
+                  name: 'category',
+                  value: controller.category.value.isEmpty ? null : controller.category.value,
+                  callback: (newValue) => controller.updateField(controller.category, newValue ?? ''),
+                  isEditable: true,
+                ),
+                // ------------------------
                 _buildSelectableDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}:',

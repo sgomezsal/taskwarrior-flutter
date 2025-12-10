@@ -39,6 +39,7 @@ class Modify {
         'until',
         'priority',
         'project',
+        'category',
         'tags',
         'annotations',
       ])

@@ -12,6 +12,7 @@ class TaskForReplica {
   final String uuid;
   final String? priority;
   final String? project;
+  final String? category;
 
   TaskForReplica({
     this.modified,
@@ -24,6 +25,7 @@ class TaskForReplica {
     required this.uuid,
     this.priority,
     this.project,
+    this.category,
   });
 
   factory TaskForReplica.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,7 @@ class TaskForReplica {
       uuid: json['uuid']?.toString() ?? '',
       priority: json['priority']?.toString(),
       project: json['project']?.toString(),
+      category: json['category']?.toString(),
     );
   }
 
@@ -77,6 +80,7 @@ class TaskForReplica {
       'uuid': uuid,
       if (priority != null) 'priority': priority,
       if (project != null) 'project': project,
+      if (category != null) 'category': category,
     };
   }
 
@@ -90,6 +94,8 @@ class TaskForReplica {
     List<String>? tags,
     String? uuid,
     String? priority,
+    String? project,
+    String? category,
   }) {
     return TaskForReplica(
       modified: modified ?? this.modified,
@@ -101,7 +107,8 @@ class TaskForReplica {
       tags: tags ?? this.tags,
       uuid: uuid ?? this.uuid,
       priority: priority ?? this.priority,
-      project: project ?? project,
+      project: project ?? this.project,
+      category: category ?? this.category,
     );
   }
 

@@ -49,6 +49,7 @@ class HomeController extends GetxController {
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
+  final RxString categoryFilter = ''.obs;
   final RxBool tagUnion = false.obs;
   final RxString selectedSort = ''.obs;
   final RxSet<String> selectedTags = <String>{}.obs;
@@ -98,6 +99,7 @@ class HomeController extends GetxController {
       pendingFilter,
       waitingFilter,
       projectFilter,
+      categoryFilter,
       tagUnion,
       selectedSort,
       selectedTags,
@@ -252,6 +254,16 @@ class HomeController extends GetxController {
       }).toList();
     }
 
+    if (categoryFilter.value.isNotEmpty) {
+      queriedTasks.value = queriedTasks.where((task) {
+        final taskCategory = task.category;
+        if (taskCategory == null || taskCategory.isEmpty) {
+          return false;
+        }
+        return taskCategory == categoryFilter.value;
+      }).toList();
+    }
+
     queriedTasks.value = queriedTasks.where((task) {
       var tags = task.tags?.toSet() ?? {};
       if (tagUnion.value) {
@@ -340,6 +352,31 @@ class HomeController extends GetxController {
     Query(storage.tabs.tab()).toggleProjectFilter(project);
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     _refreshTasks();
+  }
+
+  void toggleCategoryFilter(String category) {
+    categoryFilter.value = categoryFilter.value == category ? '' : category;
+    _refreshTasks();
+  }
+
+  List<String> getUniqueCategories() {
+    if (taskReplica.value) {
+      return tasksFromReplica
+          .where((task) => task.category != null && task.category!.isNotEmpty)
+          .map((task) => task.category!)
+          .toSet()
+          .toList()
+        ..sort();
+    }
+    // For regular TaskWarrior tasks, extract from UDAs
+    final categories = <String>{};
+    for (var task in storage.data.pendingData()) {
+      final category = task.category;
+      if (category != null && category.isNotEmpty) {
+        categories.add(category);
+      }
+    }
+    return categories.toList()..sort();
   }
 
   void toggleTagUnion() {
@@ -611,6 +648,8 @@ class HomeController extends GetxController {
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
+      categoryFilter: categoryFilter.value,
+      toggleCategoryFilter: toggleCategoryFilter,
       tagFilters: tagFilters,
     );
     return filters;

@@ -6,6 +6,7 @@ import 'package:taskwarrior/app/models/filters.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/project_column_home_page.dart';
 import 'package:taskwarrior/app/modules/home/views/project_column_taskc.dart';
+import 'package:taskwarrior/app/modules/home/views/category_column.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -219,6 +220,70 @@ class FilterDrawer extends StatelessWidget {
                               .filterDrawerNoProjectsAvailable));
                     }
                   },
+                ),
+              ),
+              const Divider(
+                color: Color.fromARGB(0, 48, 46, 46),
+              ),
+              // Category Filter Section - Collapsible, below Projects
+              Visibility(
+                visible: !homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: tileColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: TaskWarriorColors.borderColor,
+                    ),
+                  ),
+                  child: FutureBuilder<List<String>>(
+                    future: Future.value(homeController.getUniqueCategories()),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>> snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return CategoryColumn(
+                          categories: snapshot.data!,
+                          categoryFilter: filters.categoryFilter,
+                          callback: filters.toggleCategoryFilter,
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: homeController.taskchampion.value ||
+                    homeController.taskReplica.value,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: tileColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: TaskWarriorColors.borderColor,
+                    ),
+                  ),
+                  child: FutureBuilder<List<String>>(
+                    future: Future.value(homeController.getUniqueCategories()),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>> snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return CategoryColumn(
+                          categories: snapshot.data!,
+                          categoryFilter: filters.categoryFilter,
+                          callback: filters.toggleCategoryFilter,
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
                 ),
               ),
               const Divider(

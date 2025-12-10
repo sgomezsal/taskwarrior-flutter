@@ -98,6 +98,7 @@ class DetailRouteController extends GetxController {
   late Rx<DateTime?> untilValue = Rx<DateTime?>(null);
   late Rxn<String>? priorityValue = Rxn<String>(null);
   late Rxn<String>? projectValue = Rxn<String>(null);
+  late Rxn<String>? categoryValue = Rxn<String>(null);
   late Rxn<BuiltList<String>>? tagsValue = Rxn<BuiltList<String>>(null);
   late RxDouble urgencyValue = 0.0.obs;
 
@@ -113,6 +114,7 @@ class DetailRouteController extends GetxController {
     untilValue.value = modify.draft.until;
     priorityValue?.value = modify.draft.priority;
     projectValue?.value = modify.draft.project;
+    categoryValue?.value = modify.draft.category;
     tagsValue?.value = modify.draft.tags;
     urgencyValue.value = urgency(modify.draft);
   }

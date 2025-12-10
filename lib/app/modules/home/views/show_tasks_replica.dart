@@ -16,6 +16,7 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   const TaskReplicaViewBuilder({
     super.key,
     this.project,
+    this.category,
     required this.pendingFilter,
     required this.selectedSort,
     required this.replicaTasks,
@@ -24,6 +25,7 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   final String selectedSort;
   final bool pendingFilter;
   final String? project;
+  final String? category;
   final List<TaskForReplica> replicaTasks;
 
   @override
@@ -35,6 +37,9 @@ class TaskReplicaViewBuilder extends StatelessWidget {
       List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
       if (project != null && project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();
+      }
+      if (category != null && category!.isNotEmpty) {
+        tasks = tasks.where((task) => task.category == category).toList();
       }
       tasks.sort((a, b) {
         final am = a.modified ?? 0;

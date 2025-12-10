@@ -25,6 +25,7 @@ class TaskcDetailsController extends GetxController {
 
   late RxString description;
   late RxString project;
+  late RxString category;
   late RxString status;
   late RxString priority;
   late RxString due;
@@ -51,6 +52,7 @@ class TaskcDetailsController extends GetxController {
     if (task is TaskForC) {
       description = task.description.obs;
       project = (task.project ?? '-').obs;
+      category = ''.obs; // TaskForC doesn't have category
       status = task.status.obs;
       priority = (task.priority ?? '-').obs;
       due = formatDate(task.due).obs;
@@ -67,6 +69,7 @@ class TaskcDetailsController extends GetxController {
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
       project = (task.project ?? '-').obs;
+      category = (task.category ?? '').obs;
       status = (task.status ?? '').obs;
       priority = (task.priority ?? '-').obs;
       // TaskForReplica stores epoch seconds; convert to ISO string for formatting
@@ -89,6 +92,7 @@ class TaskcDetailsController extends GetxController {
       // Fallback
       description = ''.obs;
       project = '-'.obs;
+      category = ''.obs;
       status = ''.obs;
       priority = '-'.obs;
       due = '-'.obs;
@@ -299,6 +303,7 @@ class TaskcDetailsController extends GetxController {
         uuid: initialTask.uuid ?? '',
         priority: priority.string.isNotEmpty ? priority.string : null,
         project: project.string != '-' ? project.string : null,
+        category: category.string.isNotEmpty ? category.string : null,
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;

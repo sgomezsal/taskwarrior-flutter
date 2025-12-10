@@ -102,5 +102,37 @@ abstract class Task implements Built<Task, TaskBuilder> {
   String? get udas;
   double? get urgency;
 
+  /// Get category from UDAs
+  String? get category {
+    if (udas == null || udas!.isEmpty) return null;
+    try {
+      final udasMap = json.decode(udas!) as Map<String, dynamic>;
+      return udasMap['category'] as String?;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Create a new Task with updated category in UDAs
+  Task withCategory(String? category) {
+    Map<String, dynamic> udasMap = {};
+    if (udas != null && udas!.isNotEmpty) {
+      try {
+        udasMap = Map<String, dynamic>.from(json.decode(udas!));
+      } catch (e) {
+        // If parsing fails, start with empty map
+      }
+    }
+    
+    if (category == null || category.isEmpty) {
+      udasMap.remove('category');
+    } else {
+      udasMap['category'] = category;
+    }
+    
+    final newUdas = udasMap.isEmpty ? null : jsonEncode(udasMap);
+    return rebuild((b) => b..udas = newUdas);
+  }
+
   static Serializer<Task> get serializer => _$taskSerializer;
 }

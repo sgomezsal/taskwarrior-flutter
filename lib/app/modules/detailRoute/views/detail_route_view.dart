@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/modules/detailRoute/views/description_widget.dar
 import 'package:taskwarrior/app/modules/detailRoute/views/priority_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/status_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
+import 'package:taskwarrior/app/modules/detailRoute/views/category_widget.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
@@ -123,37 +124,166 @@ class DetailRouteView extends GetView<DetailRouteController> {
           body: Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Obx(
-                () => ListView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                  children: [
-                    for (var entry in {
-                      'description': controller.descriptionValue.value,
-                      'status': controller.statusValue.value,
-                      'entry': controller.entryValue.value,
-                      'modified': controller.modifiedValue.value,
-                      'start': controller.startValue.value,
-                      'end': controller.endValue.value,
-                      'due': controller.dueValue.value,
-                      'wait': controller.waitValue.value,
-                      'until': controller.untilValue.value,
-                      'priority': controller.priorityValue?.value,
-                      'project': controller.projectValue?.value,
-                      'tags': controller.tagsValue?.value,
-                      'urgency': controller.urgencyValue.value,
-                    }.entries)
+                () {
+                  final DetailRouteController ctrl = controller;
+                  final bool isReadOnly = ctrl.isReadOnly.value;
+                  
+                  return ListView(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                    children: [
+                      // Description
+                      if (ctrl.descriptionValue.value.isNotEmpty)
+                        AttributeWidget(
+                          name: 'description',
+                          value: ctrl.descriptionValue.value,
+                          callback: (newValue) => ctrl.setAttribute('description', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Status
                       AttributeWidget(
-                        name: entry.key,
-                        value: entry.value,
-                        callback: (newValue) =>
-                            controller.setAttribute(entry.key, newValue),
-                        waitKey: controller.waitKey,
-                        dueKey: controller.dueKey,
-                        untilKey: controller.untilKey,
-                        priorityKey: controller.priorityKey,
+                        name: 'status',
+                        value: ctrl.statusValue.value,
+                        callback: (newValue) => ctrl.setAttribute('status', newValue),
+                        waitKey: ctrl.waitKey,
+                        dueKey: ctrl.dueKey,
+                        untilKey: ctrl.untilKey,
+                        priorityKey: ctrl.priorityKey,
                       ),
-                  ],
-                ),
+                      // Entry
+                      if (ctrl.entryValue.value != null)
+                        AttributeWidget(
+                          name: 'entry',
+                          value: ctrl.entryValue.value,
+                          callback: (newValue) => ctrl.setAttribute('entry', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Modified
+                      if (ctrl.modifiedValue.value != null)
+                        AttributeWidget(
+                          name: 'modified',
+                          value: ctrl.modifiedValue.value,
+                          callback: (newValue) => ctrl.setAttribute('modified', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Start
+                      if (ctrl.startValue.value != null)
+                        AttributeWidget(
+                          name: 'start',
+                          value: ctrl.startValue.value,
+                          callback: (newValue) => ctrl.setAttribute('start', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // End
+                      if (ctrl.endValue.value != null)
+                        AttributeWidget(
+                          name: 'end',
+                          value: ctrl.endValue.value,
+                          callback: (newValue) => ctrl.setAttribute('end', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Due
+                      if (ctrl.dueValue.value != null)
+                        AttributeWidget(
+                          name: 'due',
+                          value: ctrl.dueValue.value,
+                          callback: (newValue) => ctrl.setAttribute('due', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Wait
+                      if (ctrl.waitValue.value != null)
+                        AttributeWidget(
+                          name: 'wait',
+                          value: ctrl.waitValue.value,
+                          callback: (newValue) => ctrl.setAttribute('wait', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Until
+                      if (ctrl.untilValue.value != null)
+                        AttributeWidget(
+                          name: 'until',
+                          value: ctrl.untilValue.value,
+                          callback: (newValue) => ctrl.setAttribute('until', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Priority
+                      if (ctrl.priorityValue?.value != null)
+                        AttributeWidget(
+                          name: 'priority',
+                          value: ctrl.priorityValue?.value,
+                          callback: (newValue) => ctrl.setAttribute('priority', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Project - ALWAYS SHOW
+                      AttributeWidget(
+                        name: 'project',
+                        value: ctrl.projectValue?.value,
+                        callback: (newValue) => ctrl.setAttribute('project', newValue),
+                        waitKey: ctrl.waitKey,
+                        dueKey: ctrl.dueKey,
+                        untilKey: ctrl.untilKey,
+                        priorityKey: ctrl.priorityKey,
+                      ),
+                      // --- Manual Insertion ---
+                      const SizedBox(height: 12),
+                      CategoryWidget(
+                        name: 'category',
+                        value: ctrl.categoryValue?.value,
+                        callback: (newValue) => ctrl.setAttribute('category', newValue),
+                        isEditable: !isReadOnly,
+                      ),
+                      // ------------------------
+                      // Tags
+                      if (ctrl.tagsValue?.value != null && ctrl.tagsValue?.value?.isNotEmpty == true)
+                        AttributeWidget(
+                          name: 'tags',
+                          value: ctrl.tagsValue?.value,
+                          callback: (newValue) => ctrl.setAttribute('tags', newValue),
+                          waitKey: ctrl.waitKey,
+                          dueKey: ctrl.dueKey,
+                          untilKey: ctrl.untilKey,
+                          priorityKey: ctrl.priorityKey,
+                        ),
+                      // Urgency
+                      AttributeWidget(
+                        name: 'urgency',
+                        value: ctrl.urgencyValue.value,
+                        callback: (newValue) => ctrl.setAttribute('urgency', newValue),
+                        waitKey: ctrl.waitKey,
+                        dueKey: ctrl.dueKey,
+                        untilKey: ctrl.untilKey,
+                        priorityKey: ctrl.priorityKey,
+                      ),
+                    ],
+                  );
+                },
               )),
           floatingActionButton: controller.modify.changes.isEmpty
               ? const SizedBox.shrink()
@@ -325,6 +455,13 @@ class AttributeWidget extends StatelessWidget {
         );
       case 'tags':
         return TagsWidget(
+          name: name,
+          value: localValue,
+          callback: callback,
+          isEditable: isEditable,
+        );
+      case 'category':
+        return CategoryWidget(
           name: name,
           value: localValue,
           callback: callback,
